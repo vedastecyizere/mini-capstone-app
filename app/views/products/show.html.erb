@@ -4,3 +4,5 @@
 <h2><%= @product.name %></h2>
 <h2><%= @product.price %></h2>
 <h2><%= @product.discount %></h2>
+
+<%= button_to "Delete", "/products/#{@product.id}", method: :delete %>

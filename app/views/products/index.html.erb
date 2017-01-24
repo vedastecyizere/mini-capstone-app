@@ -1,18 +1,20 @@
-<table>
+<h1> All Products</h1>
+
+<table class="table table-striped">
   <tr>
-
-  <th>
-    <h2><% name %></h2>
-    <h2><% price %></h2>
-    <h2><% discount %></h2>
-  </th>
-   <td>
-   <h2><%= @products.name %></h2>
-   <h2><%= @products.price %></h2>
-   <h2><%= @products.discount %></h2>
-   </td>
+    <th>Name </th>
+    <th>Price </th>
+    <th>Discount </th>
+    <th>Image</th>
   </tr>
-
+    <% @products.each do |product| %>
+      <tr>
+       <td class="size"><%= product.name %></td>
+       <td class="size"><%= product.price %></td>
+       <td class="size"><%= product.discount %></td>
+       <td> <img src= "<%= product.image %>" width="300" height="300"></img></td>
+      </tr>
+  <% end %>
 </table>
 
 
