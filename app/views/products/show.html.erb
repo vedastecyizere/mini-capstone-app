@@ -2,7 +2,9 @@
 <h1>Product</h1>
 
 <h2><%= @product.name %></h2>
-<h2><%= @product.price %></h2>
-<h2><%= @product.discount %></h2>
-
+<h2>Price: <%= @product.price %></h2>
+<h2>Tax: <%= @product.tax %></h2>
+<h2>Discount: <%= @product.discount %></h2>
+<img src="<%= @product.image %>">
 <%= button_to "Delete", "/products/#{@product.id}", method: :delete %>
+<%= button_to "Edit", "/products/#{@product.id}/edit", method: :get %>
