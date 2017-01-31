@@ -4,6 +4,7 @@
 <h2><%= @product.name %></h2>
 <h2>Price: <%= @product.price %></h2>
 <h2>Discount: <%= @product.discount %></h2>
+<h2>Supplier:<%= @product.supplier.name %></h2>
 <img src="<%= @product.image %>">
 <%= button_to "Delete", "/products/#{@product.id}", method: :delete %>
 <%= button_to "Edit", "/products/#{@product.id}/edit", method: :get %>

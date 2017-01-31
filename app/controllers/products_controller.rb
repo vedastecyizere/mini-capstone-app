@@ -56,7 +56,7 @@ class ProductsController < ApplicationController
 
   def search 
     search_query = params[:search_input]
-    @products = Product.where("name LIKE ? OR discount LIKE ?", "%#{search_query}%","%#{search_query}%")
+    @products = Product.where("name ILIKE ? OR discount ILIKE ?", "%#{search_query}%","%#{search_query}%")
 
     if @products.empty?
       flash[:info] = "No result found"
