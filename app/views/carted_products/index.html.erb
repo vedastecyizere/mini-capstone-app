@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+  <h2> Hello <%= @carts.last.order.user.name %>, here is your shopping cart </h2>
+
+    <table class="table">
+      <tr>
+        <th>Product Name</th>
+        <th>Image</th>
+        <h>Quantity</th>
+        <th>Price</th>
+        
+      </tr>
+
+      <% @carts.each do |cart| %>
+
+      <tr>
+        <td><%= cart.product.name %></td>
+        <td><img class="img" src="<%= cart.product.images.first.url %>" class="img-responsive"></td>
+        <td><%= cart.quantity %></td>
+        <td><%= cart.product.price %></td>
+      </tr>
+      <% end %>
+    </table>
+    <% button_to "Buy Now", "/orders/#{order.id}</button>
+  </div>
+  
+</div>

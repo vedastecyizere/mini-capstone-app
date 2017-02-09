@@ -1,0 +1,14 @@
+<h1>Finally, you got a list of your pictures!</h1>
+  <div class="row">
+    <% @images.each_slice(3) do |third_images| %>
+      <div class="row">
+          <% third_images.each do |image| %>
+            <div class="col-md-4">
+              <img class="size" src="<%= image.url %>" class="img-responsive">
+            </div>
+          <% end %>
+      </div>
+    <% end %>
+  </div>
+
+      

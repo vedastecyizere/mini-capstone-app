@@ -1,10 +1,13 @@
 class ProductsController < ApplicationController
+  before_action :authenticate_user! :except 
 
   def index 
     if params[:sort]
       @products = Product.all.order(price: params[:sort])
-    elsif params[:filter]
-      @products = Product.where("price > ?", 100000) 
+    elsif params[:filter] == "discount"
+      @products = Product.discounted_products
+    elsif params[:category]
+      @products =  Category.find_by(name: params[:category]).products
     else
       @products = Product.all
     end  
@@ -19,13 +22,18 @@ class ProductsController < ApplicationController
   end 
 
   def new
+
+    unless current_user
+     flash[:message] = "Sorry! You can create a product after sign in!"
+     redirect_to "/signup"
+    end
   end 
 
   def create
     price = params[:price]
     discount = params[:discount]
     image = params[:image]
-    product = Product.new({name: params[:name], price: price, discount: discount, image: image})
+    product = Product.new({name: params[:name], price: price, discount: discount, image: image, user_id: current_user.id})
     product.save
     flash[:info] = "New item created"
     redirect_to "/products/#{product.id}"
@@ -40,7 +48,7 @@ class ProductsController < ApplicationController
     product.name = params[:name]
     product.price = params[:price]
     product.discount = params[:discount]
-    product.image = params[:image]
+    # product.image = params[:image]
     product.save
     flash[:info] = "Item list updated"
     redirect_to "/products/#{product.id}"
