@@ -8,7 +8,7 @@
               <h2>Price: <%= product.price %></h2>
               
               <h2>discount: <%= product.discount %></h2>
-              <img src="<%= product.images.first.url %>" class="img-responsive">
+              <img src="<%= product.images.first.url if product.images.any? %>" class="img-responsive">
             </div>
           <% end %>
       </div>

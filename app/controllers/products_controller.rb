@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
-  before_action :authenticate_user! :except 
+  before_action :authenticate_user!, except: [:index, :show, :search]
+  before_action :authenticate_admin!, only: [:new, :create, :edit, :update, :destroy]
 
   def index 
     if params[:sort]
@@ -22,22 +23,27 @@ class ProductsController < ApplicationController
   end 
 
   def new
-
-    unless current_user
-     flash[:message] = "Sorry! You can create a product after sign in!"
-     redirect_to "/signup"
-    end
+    @suppliers = Supplier.all
+    @product = Product.new
   end 
 
   def create
-    price = params[:price]
-    discount = params[:discount]
-    image = params[:image]
-    product = Product.new({name: params[:name], price: price, discount: discount, image: image, user_id: current_user.id})
-    product.save
-    flash[:info] = "New item created"
-    redirect_to "/products/#{product.id}"
+    product = Product.new({
+      name: params[:name],
+      price: params[:price],
+      discount: params[:discount],
+      suppler_id: params[:supplier_id]})
+    if product.save
+      flash[:success] = "New Item created"
+      redirect_to "/product/#{product.id}"
+
+    else
+      @suppliers = Supplier.all
+      flash[:warning] = "Product NOT Created"
+      render :new
+    end 
   end 
+
 
   def edit
     @product = Product.find_by(id: params[:id])
@@ -45,28 +51,35 @@ class ProductsController < ApplicationController
 
   def update
     product = Product.find_by(id: params[:id])
-    product.name = params[:name]
-    product.price = params[:price]
-    product.discount = params[:discount]
-    # product.image = params[:image]
-    product.save
-    flash[:info] = "Item list updated"
-    redirect_to "/products/#{product.id}"
+    product.assign_attributes({
+      name: params[:name],
+      price: params[:price],
+      discount: params[:discount],
+      supplier_id: params[:supplier_id]
+    })
+    if product.save
+      flash[:info] = "Item list updated"
+      redirect_to "/products/#{product.id}"
+    else 
+      @suppliers = Supplier.all
+      render :edit
+    end 
   end
 
   def destroy
     product = Product.find_by(id: params[:id])
     product.destroy
+    flash[:danger] = "Your Item has been deleted" 
     redirect_to "/products/"
-    flash[:info] = "Your Item has been deleted"   
+      
   end
 
   def search 
     search_query = params[:search_input]
-    @products = Product.where("name ILIKE ? OR discount ILIKE ?", "%#{search_query}%","%#{search_query}%")
+    @products = Product.where("name LIKE ? OR discount LIKE ?", "%#{search_query}%","%#{search_query}%")
 
     if @products.empty?
-      flash[:info] = "No result found"
+      flash[:info] = "No product found"
     end 
     render :index
   end 

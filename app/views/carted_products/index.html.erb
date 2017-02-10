@@ -1,19 +1,17 @@
 <div class="row">
   <div class="col-md-2"></div>
   <div class="col-md-8">
-  <h2> Hello <%= @carts.last.order.user.name %>, here is your shopping cart </h2>
+  <h2> Hello <%= @order.carted_products.last.order.user.name %>, here is your shopping cart </h2>
 
     <table class="table">
       <tr>
         <th>Product Name</th>
         <th>Image</th>
         <h>Quantity</th>
-        <th>Price</th>
-        
+        <th>Price</th>   
       </tr>
 
-      <% @carts.each do |cart| %>
-
+      <% @order.carted_products.each do |cart| %>
       <tr>
         <td><%= cart.product.name %></td>
         <td><img class="img" src="<%= cart.product.images.first.url %>" class="img-responsive"></td>
@@ -22,7 +20,6 @@
       </tr>
       <% end %>
     </table>
-    <% button_to "Buy Now", "/orders/#{order.id}</button>
-  </div>
-  
+    <% button_to "Buy Now", "/orders/#{@order.id}", method: :patch %>
+  </div>  
 </div>

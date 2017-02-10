@@ -11,7 +11,7 @@ class OrdersController < ApplicationController
     if order.save
       flash[:success] ="Order Created"
       redirect_to "/orders/#{order.id}"
-  else 
+    else 
       flash[:danger] = "order not Created"
       redirect_to "/product/#{product.id}"
     end 
@@ -20,4 +20,9 @@ class OrdersController < ApplicationController
   def show
     @order = Order.find_by(id: params[:id])
   end
+    total_total = total_tax + total_subtotal
+    order.assign_attributes(tax: total_tax, subtotal: total_subtotal, total: total_total, completed: true)
+    order.save
+    redirect_to "/orders/#{order.id}"
+  end 
 end
